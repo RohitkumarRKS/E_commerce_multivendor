@@ -573,27 +573,61 @@ const Header = () => {
                     </Link>
 
                     {/* Desktop Hover Mega Dropdown */}
-                    {subs.length > 0 && (
-                      <div className={`absolute ${idx >= 7 ? 'right-0' : 'left-0'} top-full pt-2 hidden md:group-hover:block z-50 animate-fade-in`}>
-                        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 min-w-[480px] md:min-w-[550px] text-gray-800 dark:text-gray-200">
-                          <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3 mb-3">
-                            <span className="text-xs font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 flex items-center gap-1.5">
-                              <FiGrid size={15} /> {cat.name} Catalog
+                    {!isSpecialDeal && !isSpecialSeller && (
+                      <div className={`absolute ${idx >= 9 ? 'right-0' : 'left-0'} top-full pt-2 hidden md:group-hover:block z-50 animate-fade-in`}>
+                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 p-4 min-w-[320px] md:min-w-[420px] text-gray-800 dark:text-gray-200">
+                          {/* Header */}
+                          <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-2.5 mb-3">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 flex items-center gap-1.5">
+                              <FiGrid size={13} /> {cat.name}
                             </span>
-                            <Link to={`/search?category=${cat.slug}`} className="text-xs font-extrabold text-primary-600 hover:underline">
-                              Explore All ❯
+                            <Link to={`/search?category=${cat.slug}`} className="text-[11px] font-extrabold text-primary-600 hover:underline flex items-center gap-0.5">
+                              View All <FiChevronRight size={12} />
                             </Link>
                           </div>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            {subs.map((sub) => (
-                              <Link
-                                key={sub.id || sub.name}
-                                to={`/search?category=${cat.slug}&q=${encodeURIComponent(sub.name)}`}
-                                className="text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors truncate"
-                              >
-                                • {sub.name}
-                              </Link>
-                            ))}
+
+                          {/* Category image + description card */}
+                          {catImg && (
+                            <div className="flex items-center gap-3 mb-3 p-2.5 bg-surface-50 dark:bg-gray-800/60 rounded-xl border border-gray-100 dark:border-gray-700/60">
+                              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700">
+                                <img src={catImg} alt={cat.name} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-xs font-bold text-gray-900 dark:text-white truncate">{cat.name}</p>
+                                {cat.description && (
+                                  <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">{cat.description.split(',').slice(0, 3).join(', ')}</p>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Subcategories grid */}
+                          {subs.length > 0 ? (
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                              {subs.map((sub) => (
+                                <Link
+                                  key={sub.id || sub.name}
+                                  to={`/search?category=${cat.slug}&q=${encodeURIComponent(sub.name)}`}
+                                  className="text-[11px] font-semibold text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors truncate py-1 px-1.5 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-800"
+                                >
+                                  • {sub.name}
+                                </Link>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-center py-2">
+                              <p className="text-[11px] text-gray-400">Browse all products in this category</p>
+                            </div>
+                          )}
+
+                          {/* Shop Now CTA */}
+                          <div className="mt-3 pt-2.5 border-t border-gray-100 dark:border-gray-800">
+                            <Link
+                              to={`/search?category=${cat.slug}`}
+                              className="flex items-center justify-center gap-1.5 w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white text-[11px] font-bold rounded-xl transition-colors"
+                            >
+                              Shop {cat.name} <FiChevronRight size={12} />
+                            </Link>
                           </div>
                         </div>
                       </div>

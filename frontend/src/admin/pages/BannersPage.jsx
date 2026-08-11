@@ -105,8 +105,8 @@ const BannersPage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Hero Banners</h1>
-          <p className="text-sm text-gray-500">Upload discount offers and promotional slides for the Home Page hero slider</p>
+          <h1 className="text-2xl font-bold text-gray-900">Manage Banners & Offers</h1>
+          <p className="text-sm text-gray-500">Upload hero slides, promotional offer banners between products, and sale badges</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -122,9 +122,9 @@ const BannersPage = () => {
         <div>
           <h4 className="font-bold text-sm">Recommended Banner Size & Specifications</h4>
           <p className="text-xs text-blue-700 mt-1 leading-relaxed">
-            • <strong>Image Dimensions:</strong> 1200 × 400 pixels (3:1 aspect ratio) for best display.<br />
-            • <strong>Format:</strong> PNG, JPG, or WebP (transparent background recommended for side graphic).<br />
-            • Banners will auto-play on the Home Page hero slider every <strong>5 seconds</strong>.
+            • <strong>Hero Carousel:</strong> 1200 × 400 px (3:1 ratio). Auto-plays every <strong>5 seconds</strong>.<br />
+            • <strong>In-Grid Offer Banner:</strong> 1200 × 200 px (6:1 ratio). Displays between products on the homepage.<br />
+            • <strong>Format:</strong> PNG, JPG, or WebP (transparent background recommended for side graphic).
           </p>
         </div>
       </div>
@@ -188,6 +188,7 @@ const BannersPage = () => {
                 className="input"
               >
                 <option value="hero">Hero Carousel Banner (Home Page)</option>
+                <option value="offer_grid">In-Grid Offer Banner (Between Products)</option>
                 <option value="promo_badge">Sub-Header Promo Sale Badge (Top Header Bar)</option>
               </select>
             </div>
@@ -240,6 +241,7 @@ const BannersPage = () => {
               <tr>
                 <th className="px-6 py-4">Banner</th>
                 <th className="px-6 py-4">Badge / Offer</th>
+                <th className="px-6 py-4">Position</th>
                 <th className="px-6 py-4">Target Link</th>
                 <th className="px-6 py-4 text-center">Status</th>
                 <th className="px-6 py-4 text-center">Actions</th>
@@ -268,6 +270,17 @@ const BannersPage = () => {
                       {b.badge || b.discount || 'Special Offer'}
                     </span>
                   </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
+                      b.position === 'offer_grid'
+                        ? 'bg-purple-50 text-purple-600 border border-purple-200'
+                        : b.position === 'promo_badge'
+                        ? 'bg-teal-50 text-teal-600 border border-teal-200'
+                        : 'bg-blue-50 text-blue-600 border border-blue-200'
+                    }`}>
+                      {b.position === 'offer_grid' ? '📦 In-Grid' : b.position === 'promo_badge' ? '🏷️ Promo' : '🖼️ Hero'}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-xs text-gray-500 font-mono flex items-center gap-1">
                     {b.linkUrl} <FiExternalLink size={12} />
                   </td>
@@ -294,7 +307,7 @@ const BannersPage = () => {
               ))}
               {banners.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-gray-400">
+                  <td colSpan={6} className="text-center py-12 text-gray-400">
                     No custom banners created yet. Built-in promo slides will be displayed on the Home Page hero slider.
                   </td>
                 </tr>

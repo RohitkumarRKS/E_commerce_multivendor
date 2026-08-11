@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fi';
 import { productAPI, categoryAPI, bannerAPI } from '../services/api';
 import ProductCard from '../components/common/ProductCard';
+import OfferBannerCard from '../components/common/OfferBannerCard';
 import Loader from '../components/common/Loader';
 import HeroBanner from '../components/common/HeroBanner';
 import CustomSelect from '../components/common/CustomSelect';
@@ -156,6 +157,26 @@ const HomePage = () => {
     c.description?.toLowerCase().includes(categorySearchQuery.toLowerCase())
   );
 
+  // Filter offer_grid banners for in-grid display
+  const offerGridBanners = banners.filter(
+    (b) => b.position === 'offer_grid' && b.isActive
+  );
+
+  // Helper: interleave offer banners into product array every N items
+  const interleaveOfferBanners = (productsList, bannersToInsert, interval = 6) => {
+    if (!bannersToInsert || bannersToInsert.length === 0) return productsList.map((p) => ({ type: 'product', data: p }));
+    const result = [];
+    let bannerIdx = 0;
+    for (let i = 0; i < productsList.length; i++) {
+      result.push({ type: 'product', data: productsList[i] });
+      if ((i + 1) % interval === 0 && bannerIdx < bannersToInsert.length) {
+        result.push({ type: 'offer_banner', data: bannersToInsert[bannerIdx] });
+        bannerIdx++;
+      }
+    }
+    return result;
+  };
+
   return (
     <div className="min-h-screen">
       {/* 1. Standalone Hero Banner Component */}
@@ -284,9 +305,13 @@ const HomePage = () => {
               </div>
             ) : processedProducts.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 sm:gap-4">
-                {processedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+                {interleaveOfferBanners(processedProducts, offerGridBanners, 6).map((item, i) =>
+                  item.type === 'product' ? (
+                    <ProductCard key={item.data.id} product={item.data} />
+                  ) : (
+                    <OfferBannerCard key={`offer-${item.data.id}`} banner={item.data} />
+                  )
+                )}
               </div>
             ) : (
               <div className="text-center py-16">
@@ -324,9 +349,13 @@ const HomePage = () => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {featuredProducts.slice(0, 8).map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+                {interleaveOfferBanners(featuredProducts.slice(0, 8), offerGridBanners.slice(0, 1), 4).map((item, i) =>
+                  item.type === 'product' ? (
+                    <ProductCard key={item.data.id} product={item.data} />
+                  ) : (
+                    <OfferBannerCard key={`featured-offer-${item.data.id}`} banner={item.data} />
+                  )
+                )}
               </div>
             </div>
           </div>
