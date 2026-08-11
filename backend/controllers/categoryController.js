@@ -74,7 +74,7 @@ exports.getCategory = async (req, res, next) => {
 // Create category (admin)
 exports.createCategory = async (req, res, next) => {
   try {
-    const { name, description, parentId, sortOrder, showInNavbar } = req.body;
+    const { name, description, parentId, sortOrder, showInNavbar, icon } = req.body;
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -86,7 +86,7 @@ exports.createCategory = async (req, res, next) => {
       });
     }
 
-    const categoryData = { name, slug, description, parentId, sortOrder };
+    const categoryData = { name, slug, description, parentId, sortOrder, icon };
     if (typeof showInNavbar === 'boolean') categoryData.showInNavbar = showInNavbar;
     if (typeof showInNavbar === 'string') categoryData.showInNavbar = showInNavbar === 'true';
 
@@ -110,7 +110,7 @@ exports.createCategory = async (req, res, next) => {
 exports.updateCategory = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, parentId, sortOrder, isActive, showInNavbar } = req.body;
+    const { name, description, parentId, sortOrder, isActive, showInNavbar, icon } = req.body;
 
     const category = await Category.findByPk(id);
     if (!category) {
@@ -128,6 +128,7 @@ exports.updateCategory = async (req, res, next) => {
     if (description !== undefined) updateData.description = description;
     if (parentId !== undefined) updateData.parentId = parentId;
     if (sortOrder !== undefined) updateData.sortOrder = sortOrder;
+    if (icon !== undefined) updateData.icon = icon;
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
     if (typeof showInNavbar === 'boolean') updateData.showInNavbar = showInNavbar;
     if (typeof showInNavbar === 'string') updateData.showInNavbar = showInNavbar === 'true';

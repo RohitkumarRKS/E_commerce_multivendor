@@ -22,6 +22,7 @@ const CategoriesPage = () => {
     parentId: '',
     sortOrder: 0,
     showInNavbar: true,
+    icon: '',
     image: null,
   });
 
@@ -50,7 +51,7 @@ const CategoriesPage = () => {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', description: '', parentId: '', sortOrder: 0, showInNavbar: true, image: null });
+    setFormData({ name: '', description: '', parentId: '', sortOrder: 0, showInNavbar: true, icon: '', image: null });
     setImagePreview(null);
     setShowAddForm(false);
     setEditingCategory(null);
@@ -83,6 +84,7 @@ const CategoriesPage = () => {
       parentId: category.parentId || '',
       sortOrder: category.sortOrder || 0,
       showInNavbar: category.showInNavbar !== false,
+      icon: category.icon || '',
       image: null,
     });
     setImagePreview(category.image ? getImageUrl(category.image) : null);
@@ -244,7 +246,32 @@ const CategoriesPage = () => {
             </div>
 
             <div>
-              <label className="block font-extrabold text-gray-800 dark:text-gray-200 mb-1">Category Image / Icon</label>
+              <label className="block font-extrabold text-gray-800 dark:text-gray-200 mb-1">Category Icon Emoji</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={formData.icon}
+                  onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                  className="input font-semibold text-center text-lg w-16"
+                  placeholder="📱"
+                />
+                <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide py-1">
+                  {['💻', '👕', '📱', '🛋️', '💄', '🧸', '🏏', '📺', '👟', '🛒', '🪖', '📚', '🎮', '⌚', '🛵', '⚡'].map((emoji) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, icon: emoji })}
+                      className="w-7 h-7 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-gray-700 text-xs flex items-center justify-center transition-colors"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block font-extrabold text-gray-800 dark:text-gray-200 mb-1">Category Image File Upload</label>
               <input
                 type="file"
                 accept="image/*"

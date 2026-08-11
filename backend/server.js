@@ -188,6 +188,9 @@ const startServer = async () => {
       if (!categoryCols.show_in_navbar) {
         await queryInterface.addColumn('categories', 'show_in_navbar', { type: DataTypes.BOOLEAN, defaultValue: true });
       }
+      if (!categoryCols.icon) {
+        await queryInterface.addColumn('categories', 'icon', { type: DataTypes.STRING(50), allowNull: true });
+      }
 
       // Auto-migrate products table
       const productCols = await queryInterface.describeTable('products');

@@ -455,121 +455,126 @@ const Header = () => {
       {/* 2. INDUKART PROFESSIONAL ICON CATEGORY STRIP (BOTH MOBILE & DESKTOP) */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-20">
         <div className="max-w-[1500px] mx-auto px-3 sm:px-6">
-          <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-3">
+          <div className="flex items-center justify-between gap-4 py-3">
             
-            {/* 1. ALL CATEGORIES BUTTON */}
-            <button
-              onClick={() => setShowDrawer(true)}
-              className="flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all border border-primary-400">
-                <FiGrid size={22} />
-              </div>
-              <span className="text-[11px] font-black text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-center tracking-tight whitespace-nowrap">
-                All Categories
-              </span>
-            </button>
+            {/* LEFT SIDE: SCROLLABLE ALL CATEGORIES */}
+            <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-1 min-w-0 flex-1">
+              {/* ALL CATEGORIES BUTTON */}
+              <button
+                onClick={() => setShowDrawer(true)}
+                className="flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all border border-primary-400">
+                  <FiGrid size={22} />
+                </div>
+                <span className="text-[11px] font-black text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-center tracking-tight whitespace-nowrap">
+                  All Categories
+                </span>
+              </button>
 
-            {/* 2. DYNAMIC CATEGORY ITEMS WITH TOP ICON + BOTTOM TEXT */}
-            {categories
-              .filter((c) => c.showInNavbar !== false && c.showInNavbar !== 0 && c.showInNavbar !== 'false')
-              .slice(0, 14)
-              .map((cat, idx) => {
-                let subs = cat.subcategories && cat.subcategories.length > 0 ? cat.subcategories : [];
-                if (subs.length === 0 && cat.description && cat.description.includes(',')) {
-                  subs = cat.description.split(',').map((d, subIdx) => ({
-                    id: `${cat.id}-${subIdx}`,
-                    name: d.trim(),
-                    slug: cat.slug,
-                    description: '',
-                  }));
-                }
+              {/* DYNAMIC CATEGORY ITEMS (ALL CATEGORIES DISPLAYED) */}
+              {categories
+                .filter((c) => c.showInNavbar !== false && c.showInNavbar !== 0 && c.showInNavbar !== 'false')
+                .map((cat, idx) => {
+                  let subs = cat.subcategories && cat.subcategories.length > 0 ? cat.subcategories : [];
+                  if (subs.length === 0 && cat.description && cat.description.includes(',')) {
+                    subs = cat.description.split(',').map((d, subIdx) => ({
+                      id: `${cat.id}-${subIdx}`,
+                      name: d.trim(),
+                      slug: cat.slug,
+                      description: '',
+                    }));
+                  }
 
-                const catImg = cat.image ? getImageUrl(cat.image) : null;
-                const isSelected = selectedCategory === cat.slug;
+                  const catImg = cat.image ? getImageUrl(cat.image) : null;
+                  const isSelected = selectedCategory === cat.slug;
 
-                return (
-                  <div key={cat.id || cat.slug} className="relative group flex-shrink-0">
-                    <Link
-                      to={`/search?category=${cat.slug}`}
-                      className="flex flex-col items-center gap-1.5 group cursor-pointer"
-                    >
-                      <div className={`w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center transition-all shadow-xs border ${
-                        isSelected
-                          ? 'bg-primary-500 text-white border-primary-500 scale-105 shadow-md ring-2 ring-primary-500/20'
-                          : 'bg-surface-50 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 border-gray-200/80 dark:border-gray-700 group-hover:scale-110 group-hover:border-primary-400 group-hover:shadow-md'
-                      }`}>
-                        {catImg ? (
-                          <img src={catImg} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                        ) : (
-                          <span className="text-2xl">{getCategoryIcon(cat.slug, cat.icon)}</span>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <span className={`text-[11px] font-bold text-center tracking-tight transition-colors whitespace-nowrap ${
-                          isSelected ? 'text-primary-600 dark:text-primary-400 font-black' : 'text-gray-700 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400'
+                  return (
+                    <div key={cat.id || cat.slug} className="relative group flex-shrink-0">
+                      <Link
+                        to={`/search?category=${cat.slug}`}
+                        className="flex flex-col items-center gap-1.5 group cursor-pointer"
+                      >
+                        <div className={`w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center transition-all shadow-xs border ${
+                          isSelected
+                            ? 'bg-primary-500 text-white border-primary-500 scale-105 shadow-md ring-2 ring-primary-500/20'
+                            : 'bg-surface-50 dark:bg-gray-800/90 text-gray-800 dark:text-gray-200 border-gray-200/80 dark:border-gray-700 group-hover:scale-110 group-hover:border-primary-400 group-hover:shadow-md'
                         }`}>
-                          {cat.name}
-                        </span>
-                        {isSelected && <div className="w-5 h-1 bg-primary-500 rounded-full mt-0.5 animate-scale-in" />}
-                      </div>
-                    </Link>
+                          {catImg ? (
+                            <img src={catImg} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                          ) : (
+                            <span className="text-2xl">{getCategoryIcon(cat.slug, cat.icon)}</span>
+                          )}
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className={`text-[11px] font-bold text-center tracking-tight transition-colors whitespace-nowrap ${
+                            isSelected ? 'text-primary-600 dark:text-primary-400 font-black' : 'text-gray-700 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400'
+                          }`}>
+                            {cat.name}
+                          </span>
+                          {isSelected && <div className="w-5 h-1 bg-primary-500 rounded-full mt-0.5 animate-scale-in" />}
+                        </div>
+                      </Link>
 
-                    {/* Desktop Hover Mega Dropdown */}
-                    {subs.length > 0 && (
-                      <div className={`absolute ${idx >= 7 ? 'right-0' : 'left-0'} top-full pt-2 hidden md:group-hover:block z-50 animate-fade-in`}>
-                        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 min-w-[480px] md:min-w-[550px] text-gray-800 dark:text-gray-200">
-                          <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3 mb-3">
-                            <span className="text-xs font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 flex items-center gap-1.5">
-                              <FiGrid size={15} /> {cat.name} Catalog
-                            </span>
-                            <Link to={`/search?category=${cat.slug}`} className="text-xs font-extrabold text-primary-600 hover:underline">
-                              Explore All ❯
-                            </Link>
-                          </div>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            {subs.map((sub) => (
-                              <Link
-                                key={sub.id || sub.name}
-                                to={`/search?category=${cat.slug}&q=${encodeURIComponent(sub.name)}`}
-                                className="text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors truncate"
-                              >
-                                • {sub.name}
+                      {/* Desktop Hover Mega Dropdown */}
+                      {subs.length > 0 && (
+                        <div className={`absolute ${idx >= 7 ? 'right-0' : 'left-0'} top-full pt-2 hidden md:group-hover:block z-50 animate-fade-in`}>
+                          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 min-w-[480px] md:min-w-[550px] text-gray-800 dark:text-gray-200">
+                            <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3 mb-3">
+                              <span className="text-xs font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 flex items-center gap-1.5">
+                                <FiGrid size={15} /> {cat.name} Catalog
+                              </span>
+                              <Link to={`/search?category=${cat.slug}`} className="text-xs font-extrabold text-primary-600 hover:underline">
+                                Explore All ❯
                               </Link>
-                            ))}
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                              {subs.map((sub) => (
+                                <Link
+                                  key={sub.id || sub.name}
+                                  to={`/search?category=${cat.slug}&q=${encodeURIComponent(sub.name)}`}
+                                  className="text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors truncate"
+                                >
+                                  • {sub.name}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
 
-            {/* 3. TODAY'S DEALS */}
-            <Link
-              to="/search?featured=true"
-              className="flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 text-white flex items-center justify-center text-xl shadow-md group-hover:scale-110 transition-transform">
-                ⚡
-              </div>
-              <span className="text-[11px] font-extrabold text-amber-600 dark:text-amber-400 group-hover:text-red-500 transition-colors text-center tracking-tight whitespace-nowrap">
-                Today's Deals
-              </span>
-            </Link>
+            {/* RIGHT SIDE PINNED ACTION BADGES: TODAY'S DEALS & SELL ON INDUKART */}
+            <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 pl-3 sm:pl-4 border-l border-gray-200 dark:border-gray-800">
+              {/* TODAY'S DEALS */}
+              <Link
+                to="/search?featured=true"
+                className="flex flex-col items-center gap-1.5 group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 text-white flex items-center justify-center text-xl shadow-md group-hover:scale-110 transition-transform">
+                  ⚡
+                </div>
+                <span className="text-[11px] font-extrabold text-amber-600 dark:text-amber-400 group-hover:text-red-500 transition-colors text-center tracking-tight whitespace-nowrap">
+                  Today's Deals
+                </span>
+              </Link>
 
-            {/* 4. SELL ON INDUKART (AT THE VERY END AS REQUESTED) */}
-            <Link
-              to={isSeller ? '/seller/dashboard' : '/register?role=seller'}
-              className="flex flex-col items-center gap-1.5 flex-shrink-0 group cursor-pointer pl-4 border-l border-gray-200 dark:border-gray-800"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-500 text-gray-950 flex items-center justify-center text-xl shadow-md group-hover:scale-110 transition-transform border border-amber-300">
-                🏪
-              </div>
-              <span className="text-[11px] font-black text-amber-700 dark:text-amber-400 group-hover:text-amber-600 transition-colors text-center tracking-tight whitespace-nowrap">
-                Sell On InduKart
-              </span>
-            </Link>
+              {/* SELL ON INDUKART */}
+              <Link
+                to={isSeller ? '/seller/dashboard' : '/register?role=seller'}
+                className="flex flex-col items-center gap-1.5 group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-500 text-gray-950 flex items-center justify-center text-xl shadow-md group-hover:scale-110 transition-transform border border-amber-300">
+                  🏪
+                </div>
+                <span className="text-[11px] font-black text-amber-700 dark:text-amber-400 group-hover:text-amber-600 transition-colors text-center tracking-tight whitespace-nowrap">
+                  Sell On InduKart
+                </span>
+              </Link>
+            </div>
 
           </div>
         </div>
