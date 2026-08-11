@@ -491,28 +491,34 @@ const Header = () => {
         <div className="max-w-[1500px] mx-auto px-3 sm:px-6 relative">
           
           {/* Scroll Left Button */}
-          {canScrollLeft && (
-            <button
-              onClick={() => scrollCategories('left')}
-              className="absolute left-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 transition-all"
-              aria-label="Scroll left"
-              title="Scroll Left"
-            >
-              <FiChevronLeft size={18} />
-            </button>
-          )}
+          <button
+            onClick={() => scrollCategories('left')}
+            disabled={!canScrollLeft}
+            className={`absolute left-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center transition-all ${
+              canScrollLeft
+                ? 'hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 opacity-100 cursor-pointer'
+                : 'opacity-50 hover:bg-gray-50 cursor-pointer'
+            }`}
+            aria-label="Scroll left"
+            title="Scroll Left"
+          >
+            <FiChevronLeft size={18} />
+          </button>
 
           {/* Scroll Right Button */}
-          {canScrollRight && (
-            <button
-              onClick={() => scrollCategories('right')}
-              className="absolute right-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 transition-all"
-              aria-label="Scroll right"
-              title="Scroll Right"
-            >
-              <FiChevronRight size={18} />
-            </button>
-          )}
+          <button
+            onClick={() => scrollCategories('right')}
+            disabled={!canScrollRight}
+            className={`absolute right-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center transition-all ${
+              canScrollRight
+                ? 'hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 opacity-100 cursor-pointer'
+                : 'opacity-50 hover:bg-gray-50 cursor-pointer'
+            }`}
+            aria-label="Scroll right"
+            title="Scroll Right"
+          >
+            <FiChevronRight size={18} />
+          </button>
 
           <div
             ref={categoryScrollRef}
