@@ -69,3 +69,27 @@ export const getCategoryIcon = (slug, icon) => {
   if (s.includes('2-wheeler') || s.includes('bike') || s.includes('scooter')) return '🛵';
   return '🛍️';
 };
+
+// Get short standard category label (Flipkart/E-commerce style)
+export const getShortCategoryName = (name) => {
+  if (!name) return '';
+  const n = name.trim();
+  if (n === 'Electronics & Tech' || n.toLowerCase() === 'electronics') return 'Electronics';
+  if (n === 'Fashion & Apparel' || n.toLowerCase() === 'fashion') return 'Fashion';
+  if (n === 'Mobiles & Accessories' || n.toLowerCase() === 'mobiles') return 'Mobiles';
+  if (n === 'Home & Kitchen' || n.toLowerCase() === 'home') return 'Home';
+  if (n === 'Beauty & Personal Care' || n.toLowerCase() === 'beauty') return 'Beauty';
+  if (n === 'Toys, Baby & Kids') return 'Toys, ba...';
+  if (n === 'Sports & Fitness') return 'Sports & ...';
+  if (n === 'Smart Appliances') return 'Appliances';
+  if (n === 'Footwear & Shoes') return 'Footwear';
+  if (n === 'Grocery & Gourmet') return 'Food & H...';
+  if (n === 'Automotive & Accessories') return 'Auto Acc...';
+  if (n === 'Books & Stationery') return 'Books & ...';
+  if (n === 'Gaming & Consoles') return 'Gaming';
+  if (n === 'Jewellery & Watches') return 'Jewellery';
+  if (n === 'Furniture & Decor') return 'Furniture';
+  if (n === '2-Wheelers & Parts') return '2 Wheele...';
+  if (n.length > 12) return n.substring(0, 10) + '...';
+  return n;
+};

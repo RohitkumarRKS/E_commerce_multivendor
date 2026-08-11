@@ -281,6 +281,8 @@ const startServer = async () => {
     };
 
     const fullCategoriesList = [
+      { name: "Today's Deals", description: "Special daily discount offers and featured deals", icon: '⚡', sortOrder: -2 },
+      { name: "Sell On InduKart", description: "Become a seller on InduKart marketplace", icon: '🏪', sortOrder: -1 },
       { name: 'Electronics & Tech', description: 'Smartphones, Laptops, Audio & Accessories', sortOrder: 1 },
       { name: 'Fashion & Apparel', description: 'Men, Women & Kids Clothing, Footwear & Styles', sortOrder: 2 },
       { name: 'Mobiles & Accessories', description: 'Latest Smartphones, Smartwatches & Cases', sortOrder: 3 },
