@@ -5,6 +5,7 @@ import {
   FiTrendingUp, FiShoppingBag, FiStar, FiGrid, FiHelpCircle, FiLogOut, FiShield
 } from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
+import { getCategoryIcon } from '../../utils/helpers';
 
 // Fallback subcategories mapping for standard ecommerce categories
 const DEFAULT_SUBCATEGORIES_MAP = {
@@ -215,7 +216,10 @@ const CategoryDrawer = ({ isOpen, onClose, categories = [] }) => {
                       onClick={() => setActiveCategory(cat)}
                       className="w-full flex items-center justify-between px-5 py-2.5 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
                     >
-                      <span>{cat.name}</span>
+                      <span className="flex items-center gap-2.5">
+                        <span className="text-sm">{getCategoryIcon(cat.slug, cat.icon)}</span>
+                        <span>{cat.name}</span>
+                      </span>
                       <FiChevronRight size={14} className="text-gray-400 group-hover:text-primary-500 transition-colors" />
                     </button>
                   ))}

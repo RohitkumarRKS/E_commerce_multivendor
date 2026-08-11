@@ -10,6 +10,7 @@ import useCart from '../../hooks/useCart';
 import ThemeToggle from '../common/ThemeToggle';
 import CategoryDrawer from '../common/CategoryDrawer';
 import { categoryAPI, bannerAPI } from '../../services/api';
+import { getCategoryIcon } from '../../utils/helpers';
 
 const Header = () => {
   const { user, isAuthenticated, isSeller } = useAuth();
@@ -490,8 +491,9 @@ const Header = () => {
                 <div key={cat.id || cat.slug} className="relative group py-0.5 flex-shrink-0">
                   <Link
                     to={`/search?category=${cat.slug}`}
-                    className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-all text-white/95 hover:text-white font-bold flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                    className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-all text-white/95 hover:text-white font-bold flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                   >
+                    <span className="text-xs">{getCategoryIcon(cat.slug, cat.icon)}</span>
                     <span>{cat.name}</span>
                     <FiChevronDown size={12} className="opacity-75 hidden md:inline-block group-hover:rotate-180 transition-transform" />
                   </Link>
@@ -546,8 +548,9 @@ const Header = () => {
               );
             })}
 
-            <Link to="/search?featured=true" className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-colors text-white/95 hover:text-white font-bold whitespace-nowrap flex-shrink-0">
-              Today's Deals
+            <Link to="/search?featured=true" className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-colors text-white/95 hover:text-white font-bold whitespace-nowrap flex-shrink-0 flex items-center gap-1.5">
+              <span>⚡</span>
+              <span>Today's Deals</span>
             </Link>
           </div>
 

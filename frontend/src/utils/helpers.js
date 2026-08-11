@@ -45,3 +45,26 @@ export const getStatusColor = (status) => {
   };
   return colors[status] || 'badge-primary';
 };
+
+// Get category icon/emoji helper
+export const getCategoryIcon = (slug, icon) => {
+  if (icon && typeof icon === 'string' && icon.trim()) return icon;
+  const s = slug ? slug.toLowerCase() : '';
+  if (s.includes('electronics') || s.includes('tech')) return '💻';
+  if (s.includes('fashion') || s.includes('apparel') || s.includes('clothing')) return '👕';
+  if (s.includes('mobile') || s.includes('phone') || s.includes('accessories')) return '📱';
+  if (s.includes('home') || s.includes('kitchen')) return '🏠';
+  if (s.includes('beauty') || s.includes('personal') || s.includes('care')) return '💄';
+  if (s.includes('toy') || s.includes('baby') || s.includes('kid')) return '🧸';
+  if (s.includes('sport') || s.includes('fitness')) return '⚽';
+  if (s.includes('appliance')) return '📺';
+  if (s.includes('footwear') || s.includes('shoe')) return '👟';
+  if (s.includes('grocery')) return '🛒';
+  if (s.includes('jewel') || s.includes('watch')) return '⌚';
+  if (s.includes('auto') || s.includes('vehicle')) return '🚗';
+  if (s.includes('book') || s.includes('stationery')) return '📚';
+  if (s.includes('gaming') || s.includes('console')) return '🎮';
+  if (s.includes('furniture')) return '🛋️';
+  if (s.includes('2-wheeler') || s.includes('bike')) return '🏍️';
+  return '🏷️';
+};
