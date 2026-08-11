@@ -32,6 +32,7 @@ const Header = () => {
   const [loadingGeo, setLoadingGeo] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const categoryDropdownRef = useRef(null);
+  const locationModalRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
   // Category Strip Horizontal Scroll Controls State & Ref
@@ -99,6 +100,9 @@ const Header = () => {
     const handleClickOutside = (event) => {
       if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(event.target)) {
         setShowCategoryDropdown(false);
+      }
+      if (locationModalRef.current && !locationModalRef.current.contains(event.target)) {
+        setShowLocationModal(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -262,9 +266,12 @@ const Header = () => {
           </Link>
 
           {/* Location Selector Widget (Right Next to Logo) */}
-          <div className="relative flex-shrink-0">
+          <div className="relative flex-shrink-0" ref={locationModalRef}>
             <button
-              onClick={() => setShowLocationModal(!showLocationModal)}
+              onClick={() => {
+                setShowLocationModal((prev) => !prev);
+                setShowCategoryDropdown(false);
+              }}
               className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl text-left bg-surface-50 dark:bg-gray-800/80 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 transition-all text-xs cursor-pointer group"
               title="Set Delivery Location"
             >
@@ -342,7 +349,10 @@ const Header = () => {
               <div className="relative flex-shrink-0" ref={categoryDropdownRef}>
                 <button
                   type="button"
-                  onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                  onClick={() => {
+                    setShowCategoryDropdown((prev) => !prev);
+                    setShowLocationModal(false);
+                  }}
                   className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700/80 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-100 font-extrabold text-xs py-2.5 px-3 rounded-l-2xl border-r border-gray-200 dark:border-gray-600 flex items-center gap-1.5 cursor-pointer max-w-[155px] transition-colors"
                 >
                   <span className="truncate">
