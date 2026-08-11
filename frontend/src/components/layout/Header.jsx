@@ -239,7 +239,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 transition-colors shadow-sm bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
       {/* 1. STORE THEME TOP HEADER (CLEAN LIGHT/DARK MODE WITH COMBINED SEARCH & LOCATION) */}
-      <div className="py-2.5 px-3 lg:px-6 relative z-40">
+      <div className="py-2.5 px-3 lg:px-6 relative z-50">
         <div className="flex items-center justify-between gap-3 md:gap-5 max-w-[1500px] mx-auto">
           {/* Mobile Menu Toggle */}
           <button
@@ -281,7 +281,7 @@ const Header = () => {
 
             {/* Location Popup Modal */}
             {showLocationModal && (
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 z-50 animate-slide-up">
+              <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 z-[60] animate-slide-up">
                 <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-100 dark:border-gray-800">
                   <h4 className="font-bold text-sm flex items-center gap-2 text-gray-900 dark:text-white">
                     <FiMapPin className="text-primary-500" /> Choose Delivery Location
@@ -355,7 +355,7 @@ const Header = () => {
 
                 {/* Custom Glassmorphism Dropdown Menu */}
                 {showCategoryDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-50 animate-slide-up max-h-80 overflow-y-auto custom-scrollbar">
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-[60] animate-slide-up max-h-80 overflow-y-auto custom-scrollbar">
                     <button
                       type="button"
                       onClick={() => {
@@ -487,7 +487,7 @@ const Header = () => {
       </div>
 
       {/* 2. FLIPKART/INDUKART STANDARD ICON CATEGORY STRIP (BOTH MOBILE & DESKTOP) */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-40 group/strip">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-20 group/strip">
         <div className="max-w-[1500px] mx-auto px-3 sm:px-6 relative">
           
           {/* Scroll Left Button */}
