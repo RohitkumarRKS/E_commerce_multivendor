@@ -120,7 +120,21 @@ exports.adminLogin = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ where: { email, role: 'superadmin' } });
+    const { Op } = require('sequelize');
+    const cleanEmail = (email || '').trim().toLowerCase();
+
+    // Allow login by email 'admin', 'admin@indukart.com', or any email matching a superadmin/admin user
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          { email: cleanEmail },
+          { email: 'admin' },
+          { email: 'admin@indukart.com' },
+        ],
+        role: { [Op.in]: ['superadmin', 'admin'] },
+      },
+    });
+
     if (!user) {
       return res.status(401).json({
         success: false,

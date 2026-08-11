@@ -229,19 +229,32 @@ const startServer = async () => {
     }
     console.log('✅ Database synced.');
 
-    // Create default superadmin if not exists
+    // Create default superadmin accounts if not exist
     const { User, Category } = require('./models');
-    const adminExists = await User.findOne({ where: { role: 'superadmin' } });
-    if (!adminExists) {
-      await User.create({
-        name: 'Super Admin',
-        email: 'admin',
-        password: 'admin@123',
-        role: 'superadmin',
-        isVerified: true,
-        isActive: true,
-      });
-      console.log('✅ Default superadmin created (admin / admin@123)');
+    const adminAccounts = [
+      { name: 'Super Admin', email: 'admin', password: 'admin@123' },
+      { name: 'Super Admin', email: 'admin@indukart.com', password: 'admin@123' },
+    ];
+
+    for (const adm of adminAccounts) {
+      const existingAdm = await User.findOne({ where: { email: adm.email } });
+      if (!existingAdm) {
+        await User.create({
+          name: adm.name,
+          email: adm.email,
+          password: adm.password,
+          role: 'superadmin',
+          isVerified: true,
+          isActive: true,
+        });
+        console.log(`✅ Default superadmin created (${adm.email} / ${adm.password})`);
+      } else {
+        if (existingAdm.role !== 'superadmin' || !existingAdm.isActive) {
+          existingAdm.role = 'superadmin';
+          existingAdm.isActive = true;
+          await existingAdm.save();
+        }
+      }
     }
 
     // Seed default categories if none exist or update to full list
