@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   FiSearch, FiShoppingCart, FiUser, FiMenu, FiX,
-  FiMapPin, FiNavigation, FiCheckCircle, FiAlertCircle, FiChevronDown, FiChevronRight, FiZap, FiGrid, FiCheck, FiLayers
+  FiMapPin, FiNavigation, FiCheckCircle, FiAlertCircle, FiChevronLeft, FiChevronDown, FiChevronRight, FiZap, FiGrid, FiCheck, FiLayers
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import useAuth from '../../hooks/useAuth';
@@ -33,8 +33,39 @@ const Header = () => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const categoryDropdownRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const catStripRef = useRef(null);
-  const [catStripScroll, setCatStripScroll] = useState({ canLeft: false, canRight: true });
+
+  // Category Strip Horizontal Scroll Controls State & Ref
+  const categoryScrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkCategoryScroll = () => {
+    if (categoryScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = categoryScrollRef.current;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scrollCategories = (direction) => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -350 : 350;
+      categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const el = categoryScrollRef.current;
+    if (el) {
+      checkCategoryScroll();
+      el.addEventListener('scroll', checkCategoryScroll);
+      window.addEventListener('resize', checkCategoryScroll);
+      return () => {
+        el.removeEventListener('scroll', checkCategoryScroll);
+        window.removeEventListener('resize', checkCategoryScroll);
+      };
+    }
+  }, [categories]);
 
   // SuperAdmin Managed Promo Badge State
   const [promoBadge, setPromoBadge] = useState({
@@ -456,54 +487,36 @@ const Header = () => {
       </div>
 
       {/* 2. FLIPKART/INDUKART STANDARD ICON CATEGORY STRIP (BOTH MOBILE & DESKTOP) */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-40">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-40 group/strip">
         <div className="max-w-[1500px] mx-auto px-3 sm:px-6 relative">
-
-          {/* LEFT SCROLL ARROW */}
-          {catStripScroll.canLeft && (
+          
+          {/* Scroll Left Button */}
+          {canScrollLeft && (
             <button
-              onClick={() => {
-                if (catStripRef.current) catStripRef.current.scrollBy({ left: -240, behavior: 'smooth' });
-              }}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all text-gray-600 dark:text-gray-300 hover:text-primary-600"
-              aria-label="Scroll categories left"
+              onClick={() => scrollCategories('left')}
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 transition-all"
+              aria-label="Scroll left"
+              title="Scroll Left"
             >
-              <FiChevronDown size={18} className="rotate-90" />
+              <FiChevronLeft size={18} />
             </button>
           )}
 
-          {/* RIGHT SCROLL ARROW */}
-          {catStripScroll.canRight && (
+          {/* Scroll Right Button */}
+          {canScrollRight && (
             <button
-              onClick={() => {
-                if (catStripRef.current) catStripRef.current.scrollBy({ left: 240, behavior: 'smooth' });
-              }}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all text-gray-600 dark:text-gray-300 hover:text-primary-600"
-              aria-label="Scroll categories right"
+              onClick={() => scrollCategories('right')}
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 hover:scale-110 active:scale-95 transition-all"
+              aria-label="Scroll right"
+              title="Scroll Right"
             >
-              <FiChevronDown size={18} className="-rotate-90" />
+              <FiChevronRight size={18} />
             </button>
-          )}
-
-          {/* Fade edges */}
-          {catStripScroll.canLeft && (
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-white dark:from-gray-900 to-transparent z-[5] pointer-events-none" />
-          )}
-          {catStripScroll.canRight && (
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white dark:from-gray-900 to-transparent z-[5] pointer-events-none" />
           )}
 
           <div
-            ref={catStripRef}
-            className="flex items-center gap-5 sm:gap-6 overflow-x-auto scrollbar-hide py-2.5 px-1"
-            onScroll={() => {
-              if (!catStripRef.current) return;
-              const el = catStripRef.current;
-              setCatStripScroll({
-                canLeft: el.scrollLeft > 8,
-                canRight: el.scrollLeft < el.scrollWidth - el.clientWidth - 8,
-              });
-            }}
+            ref={categoryScrollRef}
+            className="flex items-center gap-5 sm:gap-6 overflow-x-auto overflow-y-visible scrollbar-hide py-2.5 px-2"
           >
             
             {/* 1. ALL CATEGORIES / FOR YOU BUTTON */}
