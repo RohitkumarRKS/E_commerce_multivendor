@@ -281,8 +281,8 @@ const startServer = async () => {
     };
 
     const fullCategoriesList = [
-      { name: "Today's Deals", description: "Special daily discount offers and featured deals", icon: '⚡', sortOrder: -2 },
-      { name: "Sell On InduKart", description: "Become a seller on InduKart marketplace", icon: '🏪', sortOrder: -1 },
+      { name: "Today's Deals", slug: 'todays-deals', description: "Special daily discount offers and featured deals", icon: '⚡', sortOrder: -2 },
+      { name: "Sell On InduKart", slug: 'sell-on-indukart', description: "Become a seller on InduKart marketplace", icon: '🏪', sortOrder: -1 },
       { name: 'Electronics & Tech', description: 'Smartphones, Laptops, Audio & Accessories', sortOrder: 1 },
       { name: 'Fashion & Apparel', description: 'Men, Women & Kids Clothing, Footwear & Styles', sortOrder: 2 },
       { name: 'Mobiles & Accessories', description: 'Latest Smartphones, Smartwatches & Cases', sortOrder: 3 },
@@ -302,13 +302,22 @@ const startServer = async () => {
     ];
 
     for (const cat of fullCategoriesList) {
-      const slug = cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const slug = cat.slug || cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const image = categoryImagesMap[slug] || null;
       const existing = await Category.findOne({ where: { slug } });
       if (!existing) {
         await Category.create({ ...cat, slug, image });
-      } else if (!existing.image) {
-        existing.image = image;
+      } else {
+        // Ensure sortOrder and icon are updated for special categories
+        if (cat.sortOrder !== undefined && existing.sortOrder !== cat.sortOrder) {
+          existing.sortOrder = cat.sortOrder;
+        }
+        if (cat.icon && !existing.icon) {
+          existing.icon = cat.icon;
+        }
+        if (!existing.image && image) {
+          existing.image = image;
+        }
         await existing.save();
       }
     }

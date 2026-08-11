@@ -470,10 +470,49 @@ const Header = () => {
               </span>
             </button>
 
-            {/* 2. DYNAMIC CATEGORY ITEMS (INCLUDING SUPERADMIN-MANAGED TODAY'S DEALS & SELL ON INDUKART) */}
-            {categories
-              .filter((c) => c.showInNavbar !== false && c.showInNavbar !== 0 && c.showInNavbar !== 'false')
-              .map((cat, idx) => {
+            {/* 2. DYNAMIC CATEGORY ITEMS (INCLUDING SUPERADMIN-MANAGED TODAY'S DEALS & SELL ON INDUKART AT THE LEFT) */}
+            {(() => {
+              const todaysDealsItem = categories.find(
+                (c) => c.slug === 'todays-deals' || c.slug === 'today-s-deals' || c.name === "Today's Deals"
+              ) || {
+                id: 'sys-todays-deals',
+                name: "Today's Deals",
+                slug: 'todays-deals',
+                icon: '⚡',
+                sortOrder: -2,
+                showInNavbar: true,
+              };
+
+              const sellOnIndukartItem = categories.find(
+                (c) => c.slug === 'sell-on-indukart' || c.name === 'Sell On InduKart'
+              ) || {
+                id: 'sys-sell-on-indukart',
+                name: 'Sell On InduKart',
+                slug: 'sell-on-indukart',
+                icon: '🏪',
+                sortOrder: -1,
+                showInNavbar: true,
+              };
+
+              const otherNavCats = categories.filter(
+                (c) =>
+                  c.showInNavbar !== false &&
+                  c.showInNavbar !== 0 &&
+                  c.showInNavbar !== 'false' &&
+                  c.slug !== 'todays-deals' &&
+                  c.slug !== 'today-s-deals' &&
+                  c.slug !== 'sell-on-indukart' &&
+                  c.name !== "Today's Deals" &&
+                  c.name !== 'Sell On InduKart'
+              );
+
+              const displayNavbarCategories = [
+                ...(todaysDealsItem.showInNavbar !== false ? [todaysDealsItem] : []),
+                ...(sellOnIndukartItem.showInNavbar !== false ? [sellOnIndukartItem] : []),
+                ...otherNavCats,
+              ];
+
+              return displayNavbarCategories.map((cat, idx) => {
                 let subs = cat.subcategories && cat.subcategories.length > 0 ? cat.subcategories : [];
                 if (subs.length === 0 && cat.description && cat.description.includes(',')) {
                   subs = cat.description.split(',').map((d, subIdx) => ({
@@ -490,11 +529,11 @@ const Header = () => {
 
                 // Special target URLs for system categories
                 let targetUrl = `/search?category=${cat.slug}`;
-                if (cat.slug === 'todays-deals') targetUrl = '/search?featured=true';
-                if (cat.slug === 'sell-on-indukart') targetUrl = isSeller ? '/seller/dashboard' : '/register?role=seller';
+                if (cat.slug === 'todays-deals' || cat.slug === 'today-s-deals' || cat.name === "Today's Deals") targetUrl = '/search?featured=true';
+                if (cat.slug === 'sell-on-indukart' || cat.name === 'Sell On InduKart') targetUrl = isSeller ? '/seller/dashboard' : '/register?role=seller';
 
-                const isSpecialDeal = cat.slug === 'todays-deals';
-                const isSpecialSeller = cat.slug === 'sell-on-indukart';
+                const isSpecialDeal = cat.slug === 'todays-deals' || cat.slug === 'today-s-deals' || cat.name === "Today's Deals";
+                const isSpecialSeller = cat.slug === 'sell-on-indukart' || cat.name === 'Sell On InduKart';
 
                 return (
                   <div key={cat.id || cat.slug} className="relative group flex-shrink-0">
@@ -561,7 +600,8 @@ const Header = () => {
                     )}
                   </div>
                 );
-              })}
+              });
+            })()}
 
           </div>
         </div>
