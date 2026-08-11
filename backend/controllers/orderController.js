@@ -1,5 +1,6 @@
 const { Order, OrderItem, Cart, CartItem, Product, User } = require('../models');
 const sequelize = require('../config/db');
+const { sendOrderConfirmationEmail, sendOrderStatusUpdateEmail } = require('../utils/emailService');
 
 // Place order
 exports.createOrder = async (req, res, next) => {
@@ -98,6 +99,9 @@ exports.createOrder = async (req, res, next) => {
         },
       ],
     });
+
+    // Send order confirmation email asynchronously
+    sendOrderConfirmationEmail(req.user, fullOrder).catch(err => console.error('Failed to send order email:', err));
 
     res.status(201).json({
       success: true,
@@ -248,7 +252,9 @@ exports.updateOrderStatus = async (req, res, next) => {
       });
     }
 
-    const order = await Order.findByPk(id);
+    const order = await Order.findByPk(id, {
+      include: [{ model: User, as: 'user' }],
+    });
     if (!order) {
       return res.status(404).json({
         success: false,
@@ -260,6 +266,11 @@ exports.updateOrderStatus = async (req, res, next) => {
 
     // Also update order items status
     await OrderItem.update({ status }, { where: { orderId: id } });
+
+    if (order.user) {
+      sendOrderStatusUpdateEmail(order.user, order.orderNumber, 'Order Items', status)
+        .catch(err => console.error('Failed to send status email:', err));
+    }
 
     res.json({
       success: true,

@@ -1,23 +1,22 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  FiGrid, FiShoppingBag, FiPlusCircle, FiPackage,
-  FiSettings, FiLogOut, FiGlobe, FiChevronRight, FiPercent, FiRotateCcw
+  FiGrid, FiPackage, FiMapPin, FiUser,
+  FiSettings, FiLogOut, FiGlobe, FiHeart, FiShoppingBag, FiChevronRight
 } from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
 
-const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
+const BuyerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
 
   const menu = [
-    { path: '/seller/dashboard', label: 'Dashboard', icon: <FiGrid size={20} /> },
-    { path: '/seller/products', label: 'My Products', icon: <FiShoppingBag size={20} /> },
-    { path: '/seller/add-product', label: 'Add Product', icon: <FiPlusCircle size={20} /> },
-    { path: '/seller/orders', label: 'Orders', icon: <FiPackage size={20} /> },
-    { path: '/seller/returns', label: 'Returns & Refunds', icon: <FiRotateCcw size={20} /> },
-    { path: '/seller/promos', label: 'Promo Codes', icon: <FiPercent size={20} /> },
-    { path: '/seller/settings', label: 'Store Settings', icon: <FiSettings size={20} /> },
+    { path: '/buyer/dashboard', label: 'Dashboard', icon: <FiGrid size={20} />, badge: null },
+    { path: '/buyer/orders', label: 'My Orders', icon: <FiPackage size={20} />, badge: null },
+    { path: '/buyer/addresses', label: 'Addresses', icon: <FiMapPin size={20} />, badge: null },
+    { path: '/buyer/profile', label: 'My Profile', icon: <FiUser size={20} />, badge: null },
+    { path: '/buyer/wishlist', label: 'Wishlist', icon: <FiHeart size={20} />, badge: null },
+    { path: '/buyer/settings', label: 'Settings', icon: <FiSettings size={20} />, badge: null },
   ];
 
   const handleLogout = () => {
@@ -40,7 +39,7 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
         className={`
           fixed top-0 left-0 z-50 h-screen w-64 flex flex-col
           border-r transition-transform duration-300 ease-in-out
-          bg-gradient-to-b from-[#0a1628] via-[#132337] to-[#0a1628]
+          bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]
           border-gray-800/50
           ${isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'}
         `}
@@ -48,19 +47,19 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
         {/* Brand Header */}
         <div className="h-16 flex items-center px-4 border-b border-white/5 flex-shrink-0 relative overflow-hidden">
           {/* Subtle glow */}
-          <div className="absolute -top-6 -left-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl"></div>
+          <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary-500/10 rounded-full blur-2xl"></div>
           <div className="flex items-center gap-3 min-w-0 relative z-10">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-400/20">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-500/30 ring-2 ring-primary-400/20">
               <span className="text-white font-extrabold text-sm">
-                {user?.storeName?.[0]?.toUpperCase() || 'S'}
+                {user?.name?.[0]?.toUpperCase() || 'U'}
               </span>
             </div>
             <div className="overflow-hidden">
               <h1 className="text-white font-bold text-sm leading-tight whitespace-nowrap truncate max-w-[160px]">
-                {user?.storeName || 'My Store'}
+                {user?.name || 'User'}
               </h1>
-              <p className="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase whitespace-nowrap">
-                Seller Panel
+              <p className="text-[10px] text-primary-400 font-semibold tracking-wider uppercase whitespace-nowrap">
+                My Account
               </p>
             </div>
           </div>
@@ -68,7 +67,7 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
 
         {/* Navigation */}
         <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
-          <p className="px-3 pb-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Store</p>
+          <p className="px-3 pb-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Menu</p>
           {menu.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -79,7 +78,7 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
                 className={`
                   flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group relative
                   ${isActive
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/25'
+                    ? 'bg-gradient-to-r from-primary-600 to-blue-600 text-white shadow-lg shadow-primary-600/25'
                     : 'hover:bg-white/5 hover:text-white text-gray-400 hover:translate-x-1'
                   }
                 `}
@@ -89,6 +88,9 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
                 <span className={`flex-shrink-0 transition-transform duration-200 ${!isActive ? 'group-hover:scale-110' : ''}`}>{item.icon}</span>
                 <span className="whitespace-nowrap flex-1">{item.label}</span>
                 {isActive && <FiChevronRight size={14} className="text-white/50" />}
+                {item.badge && (
+                  <span className="bg-accent-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center">{item.badge}</span>
+                )}
               </Link>
             );
           })}
@@ -98,10 +100,18 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
         <div className="p-3 border-t border-white/5 space-y-1 flex-shrink-0">
           <Link
             to="/"
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 transition-all duration-200 group"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-primary-400 hover:bg-primary-500/10 hover:text-primary-300 transition-all duration-200 group"
           >
             <FiGlobe size={18} className="group-hover:rotate-12 transition-transform duration-300" />
             <span>Visit Website</span>
+          </Link>
+
+          <Link
+            to="/search"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 transition-all duration-200 group"
+          >
+            <FiShoppingBag size={18} className="group-hover:scale-110 transition-transform duration-300" />
+            <span>Shop Now</span>
           </Link>
 
           <button
@@ -117,4 +127,4 @@ const SellerSidebar = ({ isOpen, onToggle, isMobile, user }) => {
   );
 };
 
-export default SellerSidebar;
+export default BuyerSidebar;

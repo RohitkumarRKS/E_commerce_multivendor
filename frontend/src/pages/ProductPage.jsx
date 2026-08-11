@@ -366,11 +366,11 @@ const ProductPage = () => {
               {/* 3-Column Policy Icons */}
               <div className="grid grid-cols-3 gap-2 py-3 border-y border-gray-100 dark:border-gray-800 text-center">
                 <div className="p-2 flex flex-col items-center">
-                  <div className="w-9 h-9 rounded-full bg-blue-50 dark:bg-gray-800 text-blue-500 flex items-center justify-center mb-1">
+                  <div className="w-9 h-9 rounded-full bg-orange-50 dark:bg-gray-800 text-orange-500 flex items-center justify-center mb-1">
                     <FiRotateCcw size={16} />
                   </div>
                   <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 leading-tight">
-                    {product.returnPolicy || '10-Day Return'}
+                    {product.returnPolicy || '7 Days Replacement & Refund'}
                   </span>
                 </div>
                 {product.isCodAvailable !== false && (

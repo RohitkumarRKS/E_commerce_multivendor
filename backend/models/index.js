@@ -49,6 +49,11 @@ OrderItem.belongsTo(User, { foreignKey: 'sellerId', as: 'seller' });
 const Banner = require('./Banner');
 const Brand = require('./Brand');
 const Review = require('./Review');
+const PromoCode = require('./PromoCode');
+const PromoUsage = require('./PromoUsage');
+const ReturnRequest = require('./ReturnRequest');
+const EmailLog = require('./EmailLog');
+const EmailSetting = require('./EmailSetting');
 
 // Product <-> Review
 Product.hasMany(Review, { foreignKey: 'productId', as: 'reviews' });
@@ -57,6 +62,35 @@ Review.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
 // User <-> Review
 User.hasMany(Review, { foreignKey: 'userId', as: 'reviews' });
 Review.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+// User (Seller) <-> PromoCode
+User.hasMany(PromoCode, { foreignKey: 'sellerId', as: 'promoCodes' });
+PromoCode.belongsTo(User, { foreignKey: 'sellerId', as: 'seller' });
+
+// PromoCode <-> PromoUsage
+PromoCode.hasMany(PromoUsage, { foreignKey: 'promoCodeId', as: 'usages' });
+PromoUsage.belongsTo(PromoCode, { foreignKey: 'promoCodeId', as: 'promoCode' });
+
+// User <-> PromoUsage
+User.hasMany(PromoUsage, { foreignKey: 'userId', as: 'promoUsages' });
+PromoUsage.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+// Order <-> PromoUsage
+Order.hasMany(PromoUsage, { foreignKey: 'orderId', as: 'promoUsages' });
+PromoUsage.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+
+// ReturnRequest Associations
+Order.hasMany(ReturnRequest, { foreignKey: 'orderId', as: 'returnRequests' });
+ReturnRequest.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+
+OrderItem.hasOne(ReturnRequest, { foreignKey: 'orderItemId', as: 'returnRequest' });
+ReturnRequest.belongsTo(OrderItem, { foreignKey: 'orderItemId', as: 'orderItem' });
+
+User.hasMany(ReturnRequest, { foreignKey: 'userId', as: 'buyerReturnRequests' });
+ReturnRequest.belongsTo(User, { foreignKey: 'userId', as: 'buyer' });
+
+User.hasMany(ReturnRequest, { foreignKey: 'sellerId', as: 'sellerReturnRequests' });
+ReturnRequest.belongsTo(User, { foreignKey: 'sellerId', as: 'seller' });
 
 module.exports = {
   User,
@@ -69,4 +103,9 @@ module.exports = {
   Banner,
   Brand,
   Review,
+  PromoCode,
+  PromoUsage,
+  ReturnRequest,
+  EmailLog,
+  EmailSetting,
 };

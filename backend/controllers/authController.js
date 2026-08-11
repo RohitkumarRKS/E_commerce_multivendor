@@ -1,12 +1,15 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { sendWelcomeEmail } = require('../utils/emailService');
 
 const generateToken = (user) => {
-  return jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-  );
+  const payload = { id: user.id, email: user.email, role: user.role };
+  const options = {};
+  // If JWT_EXPIRES_IN is set, use it. Otherwise token never expires (lifetime).
+  if (process.env.JWT_EXPIRES_IN) {
+    options.expiresIn = process.env.JWT_EXPIRES_IN;
+  }
+  return jwt.sign(payload, process.env.JWT_SECRET, options);
 };
 
 // Register buyer or seller
@@ -38,6 +41,9 @@ exports.register = async (req, res, next) => {
     });
 
     const token = generateToken(user);
+
+    // Send Welcome Email asynchronously
+    sendWelcomeEmail(user).catch(err => console.error('Failed to send welcome email:', err));
 
     res.status(201).json({
       success: true,

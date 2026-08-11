@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiUpload, FiX, FiImage, FiTag, FiDollarSign, FiBox, FiFileText, FiLayers } from 'react-icons/fi';
+import { FiUpload, FiX, FiImage, FiTag, FiDollarSign, FiBox, FiFileText, FiLayers, FiRotateCcw } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { productAPI, categoryAPI } from '../../services/api';
 
@@ -217,6 +217,40 @@ const SellerAddProductPage = () => {
               </span>
             </div>
           )}
+        </div>
+
+        {/* Return & Warranty Policy */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <FiRotateCcw size={18} className="text-emerald-500" /> Return & Warranty Policy
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="input-label">Return & Refund Policy</label>
+              <select
+                name="returnPolicy"
+                value={formData.returnPolicy || '7 Days Replacement & Refund'}
+                onChange={handleChange}
+                className="input"
+              >
+                <option value="7 Days Replacement & Refund">7 Days Replacement & Refund</option>
+                <option value="10 Days Returnable & Bank Refund">10 Days Returnable & Bank Refund</option>
+                <option value="15 Days Free Return & Refund">15 Days Free Return & Refund</option>
+                <option value="Non-Returnable">Non-Returnable</option>
+              </select>
+            </div>
+            <div>
+              <label className="input-label">Warranty Policy</label>
+              <input
+                type="text"
+                name="warrantyPolicy"
+                value={formData.warrantyPolicy || '1 Year Brand Warranty'}
+                onChange={handleChange}
+                className="input"
+                placeholder="e.g. 1 Year Brand Warranty"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Images */}

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiMapPin, FiCreditCard, FiCheckCircle, FiShield, FiArrowRight, FiPlus, FiShoppingBag, FiCheck, FiTruck } from 'react-icons/fi';
+import { FiMapPin, FiCreditCard, FiCheckCircle, FiShield, FiArrowRight, FiPlus, FiShoppingBag, FiCheck, FiTruck, FiPercent, FiX, FiTag } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth';
 import useCart from '../hooks/useCart';
-import { orderAPI, paymentAPI } from '../services/api';
+import { orderAPI, paymentAPI, promoAPI } from '../services/api';
 import { formatPrice, getImageUrl } from '../utils/helpers';
 import Loader from '../components/common/Loader';
 import AddressManager, { getSavedAddresses, getActiveDeliveryAddress } from '../components/common/AddressManager';
@@ -31,6 +31,12 @@ const CheckoutPage = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [loading, setLoading] = useState(false);
+
+  // Promo Code State
+  const [promoCode, setPromoCode] = useState('');
+  const [promoApplied, setPromoApplied] = useState(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoError, setPromoError] = useState('');
 
   const items = cart?.items || [];
 
@@ -114,6 +120,8 @@ const CheckoutPage = () => {
       // 1. Create order in backend
       const orderRes = await orderAPI.create({
         shippingAddress: address,
+        promoCodeId: promoApplied?.promoId || null,
+        discountAmount: promoApplied?.discount || 0,
       });
 
       const newOrder = orderRes.data.data.order;
@@ -462,6 +470,92 @@ const CheckoutPage = () => {
                   <p className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 p-2 rounded-xl text-center border border-emerald-100 dark:border-emerald-800">
                     🎉 You save {formatPrice(summary.totalDiscount)} on this order!
                   </p>
+                )}
+
+                {/* ═══ PROMO CODE SECTION ═══ */}
+                <div className="pt-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1">
+                    <FiTag size={10} /> Apply Promo Code
+                  </p>
+                  {promoApplied ? (
+                    <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-3 relative">
+                      <button
+                        type="button"
+                        onClick={() => { setPromoApplied(null); setPromoCode(''); setPromoError(''); }}
+                        className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                      >
+                        <FiX size={14} />
+                      </button>
+                      <div className="flex items-center gap-2 mb-1">
+                        <FiCheckCircle size={14} className="text-emerald-500" />
+                        <span className="text-xs font-black text-emerald-700 dark:text-emerald-400 tracking-wider">{promoApplied.code}</span>
+                      </div>
+                      <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">{promoApplied.description || 'Coupon applied!'}</p>
+                      <div className="flex justify-between mt-2 pt-2 border-t border-emerald-200 dark:border-emerald-700">
+                        <span className="text-xs text-emerald-600 font-bold">Coupon Discount</span>
+                        <span className="text-xs font-black text-emerald-700 dark:text-emerald-400">−{formatPrice(promoApplied.discount)}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoCode}
+                          onChange={(e) => { setPromoCode(e.target.value.toUpperCase()); setPromoError(''); }}
+                          placeholder="Enter code"
+                          className="input flex-1 text-xs uppercase font-bold tracking-wider"
+                        />
+                        <button
+                          type="button"
+                          disabled={!promoCode.trim() || promoLoading}
+                          onClick={async () => {
+                            setPromoLoading(true);
+                            setPromoError('');
+                            try {
+                              const res = await promoAPI.validate({
+                                code: promoCode,
+                                cartTotal: summary.totalPrice,
+                                productIds: items.map(i => i.product?.id),
+                              });
+                              setPromoApplied(res.data.data);
+                            } catch (err) {
+                              setPromoError(err.response?.data?.message || 'Invalid code');
+                            } finally {
+                              setPromoLoading(false);
+                            }
+                          }}
+                          className="px-4 py-2 bg-primary-600 text-white font-bold text-[11px] rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1 whitespace-nowrap"
+                        >
+                          {promoLoading ? (
+                            <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <><FiPercent size={12} /> Apply</>
+                          )}
+                        </button>
+                      </div>
+                      {promoError && (
+                        <p className="text-[10px] text-red-500 font-bold mt-1.5 flex items-center gap-1">
+                          <FiX size={10} /> {promoError}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Updated Total with Promo */}
+                {promoApplied && (
+                  <>
+                    <hr className="my-2 border-gray-100 dark:border-gray-800" />
+                    <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-extrabold text-xs">
+                      <span>Coupon Discount</span>
+                      <span>−{formatPrice(promoApplied.discount)}</span>
+                    </div>
+                    <div className="flex justify-between text-base font-black text-gray-900 dark:text-white pt-1">
+                      <span>Final Amount</span>
+                      <span className="text-primary-600 dark:text-primary-400">{formatPrice(promoApplied.finalTotal)}</span>
+                    </div>
+                  </>
                 )}
               </div>
 

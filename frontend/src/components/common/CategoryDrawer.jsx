@@ -56,6 +56,12 @@ const CategoryDrawer = ({ isOpen, onClose, categories = [] }) => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [showAllCategories, setShowAllCategories] = useState(false);
 
+  const getDashboardPath = () => {
+    if (user?.role === 'superadmin' || user?.role === 'admin') return '/superadmin@2026';
+    if (user?.role === 'seller') return '/seller/dashboard';
+    return '/buyer/dashboard';
+  };
+
   if (!isOpen) return null;
 
   const handleLinkClick = (path) => {
@@ -96,7 +102,7 @@ const CategoryDrawer = ({ isOpen, onClose, categories = [] }) => {
           {/* 1. AMAZON STYLE TOP USER BANNER */}
           <div className="bg-[#232f3e] text-white p-4 flex items-center justify-between shadow-md">
             <div
-              onClick={() => handleLinkClick(isAuthenticated ? '/profile' : '/login')}
+              onClick={() => handleLinkClick(isAuthenticated ? getDashboardPath() : '/login')}
               className="flex items-center gap-3 cursor-pointer group"
             >
               <div className="w-10 h-10 rounded-full bg-gray-700 text-amber-400 flex items-center justify-center font-bold text-lg border border-gray-600 group-hover:scale-105 transition-transform">
@@ -258,7 +264,7 @@ const CategoryDrawer = ({ isOpen, onClose, categories = [] }) => {
                     Help & Settings
                   </h4>
                   <button
-                    onClick={() => handleLinkClick(isAuthenticated ? '/profile' : '/login')}
+                    onClick={() => handleLinkClick(isAuthenticated ? getDashboardPath() : '/login')}
                     className="w-full flex items-center justify-between px-5 py-2.5 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
                   >
                     <span>Your Account</span>

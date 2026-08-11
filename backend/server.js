@@ -56,6 +56,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const brandRoutes = require('./routes/brandRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const promoRoutes = require('./routes/promoRoutes');
+const returnRoutes = require('./routes/returnRoutes');
+const emailRoutes = require('./routes/emailRoutes');
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -68,6 +71,9 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/brands', brandRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/promo', promoRoutes);
+app.use('/api/returns', returnRoutes);
+app.use('/api/email', emailRoutes);
 
 // Admin stats endpoint
 app.get('/api/admin/stats', require('./middleware/auth'), require('./middleware/role')('superadmin'), async (req, res) => {
@@ -199,6 +205,24 @@ const startServer = async () => {
       }
       if (!productCols.min_order_quantity) {
         await queryInterface.addColumn('products', 'min_order_quantity', { type: DataTypes.INTEGER, defaultValue: 1 });
+      }
+      if (!productCols.is_returnable) {
+        await queryInterface.addColumn('products', 'is_returnable', { type: DataTypes.BOOLEAN, defaultValue: true });
+      }
+
+      // Auto-migrate orders table for promo codes
+      const orderCols = await queryInterface.describeTable('orders');
+      if (!orderCols.promo_code_id) {
+        await queryInterface.addColumn('orders', 'promo_code_id', { type: DataTypes.UUID, allowNull: true });
+      }
+      if (!orderCols.discount_amount) {
+        await queryInterface.addColumn('orders', 'discount_amount', { type: DataTypes.DECIMAL(10, 2), allowNull: true, defaultValue: 0 });
+      }
+
+      // Auto-migrate banners table
+      const bannerCols = await queryInterface.describeTable('banners');
+      if (!bannerCols.position) {
+        await queryInterface.addColumn('banners', 'position', { type: DataTypes.STRING(50), defaultValue: 'hero' });
       }
     } catch (migrationErr) {
       console.log('Migration check completed:', migrationErr.message);

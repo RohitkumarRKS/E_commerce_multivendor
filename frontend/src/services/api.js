@@ -156,4 +156,31 @@ export const reviewAPI = {
   create: (productId, data) => api.post(`/reviews/product/${productId}`, data),
 };
 
+// Promo Code APIs
+export const promoAPI = {
+  getAll: () => api.get('/promo'),
+  create: (data) => api.post('/promo', data),
+  update: (id, data) => api.put(`/promo/${id}`, data),
+  delete: (id) => api.delete(`/promo/${id}`),
+  validate: (data) => api.post('/promo/validate', data),
+  getAvailable: () => api.get('/promo/available'),
+};
+
+// Return & Refund APIs
+export const returnAPI = {
+  request: (data) => api.post('/returns/request', data),
+  getMyReturns: () => api.get('/returns/my-returns'),
+  getSellerReturns: () => api.get('/returns/seller-returns'),
+  getAllReturns: () => api.get('/returns/all-returns'),
+  updateStatus: (id, data) => api.put(`/returns/${id}/status`, data),
+};
+
+// Email & Notification Control APIs (SuperAdmin)
+export const emailAPI = {
+  getLogs: (params) => api.get('/email/logs', { params }),
+  getSettings: () => api.get('/email/settings'),
+  updateSettings: (data) => api.put('/email/settings', data),
+  sendTest: (data) => api.post('/email/test', data),
+};
+
 export default api;

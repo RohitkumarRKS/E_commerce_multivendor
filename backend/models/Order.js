@@ -44,6 +44,17 @@ const Order = sequelize.define('Order', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  promoCodeId: {
+    type: DataTypes.UUID,
+    allowNull: true,
+    comment: 'Applied promo code',
+  },
+  discountAmount: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true,
+    defaultValue: 0,
+    comment: 'Discount applied from promo code',
+  },
 }, {
   tableName: 'orders',
   hooks: {

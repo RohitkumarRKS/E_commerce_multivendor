@@ -101,6 +101,10 @@ const Product = sequelize.define('Product', {
     type: DataTypes.STRING(150),
     defaultValue: '7 Days Replacement',
   },
+  isReturnable: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
   minOrderQuantity: {
     type: DataTypes.INTEGER,
     defaultValue: 1,

@@ -19,7 +19,7 @@ const Header = () => {
   const getUserDashboardPath = () => {
     if (user?.role === 'superadmin' || user?.role === 'admin') return '/superadmin@2026';
     if (user?.role === 'seller' || isSeller) return '/seller/dashboard';
-    return '/profile';
+    return '/buyer/dashboard';
   };
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -204,7 +204,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 transition-colors shadow-sm bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
       {/* 1. STORE THEME TOP HEADER (CLEAN LIGHT/DARK MODE WITH COMBINED SEARCH & LOCATION) */}
-      <div className="py-2.5 px-3 lg:px-6">
+      <div className="py-2.5 px-3 lg:px-6 relative z-40">
         <div className="flex items-center justify-between gap-3 md:gap-5 max-w-[1500px] mx-auto">
           {/* Mobile Menu Toggle */}
           <button
@@ -320,11 +320,11 @@ const Header = () => {
 
                 {/* Custom Glassmorphism Dropdown Menu */}
                 {showCategoryDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 py-2 z-50 animate-slide-up max-h-80 overflow-y-auto">
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-50 animate-slide-up max-h-80 overflow-y-auto custom-scrollbar">
                     <button
                       type="button"
                       onClick={() => {
-                        handleCategoryDropdownChange('all');
+                        setSelectedCategory('all');
                         setShowCategoryDropdown(false);
                       }}
                       className={`w-full text-left px-4 py-2.5 text-xs font-bold flex items-center justify-between transition-colors ${
@@ -452,7 +452,7 @@ const Header = () => {
       </div>
 
       {/* 2. STORE THEME SECONDARY SUB-HEADER BAR (STRICT SINGLE LINE LAYOUT) */}
-      <div className="bg-primary-600 dark:bg-gray-950 text-white py-2 px-3 lg:px-6 shadow-inner relative z-30 overflow-visible">
+      <div className="bg-primary-600 dark:bg-gray-950 text-white py-2 px-3 lg:px-6 shadow-inner relative z-10 overflow-visible">
         <div className="flex items-center justify-between gap-3 max-w-[1500px] mx-auto text-xs font-semibold">
           
           {/* Single-Row Flex Container */}
@@ -592,7 +592,7 @@ const Header = () => {
           <FiSearch size={18} />
           <span className="text-[10px] font-bold">Explore</span>
         </Link>
-        <Link to={isAuthenticated ? '/profile' : '/login'} className="flex flex-col items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+        <Link to={isAuthenticated ? getUserDashboardPath() : '/login'} className="flex flex-col items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
           <FiUser size={18} />
           <span className="text-[10px] font-bold">{isAuthenticated ? 'Profile' : 'Login'}</span>
         </Link>

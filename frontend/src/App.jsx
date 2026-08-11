@@ -15,8 +15,16 @@ import SearchPage from './pages/SearchPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
-import ProfilePage from './pages/ProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
+
+// Buyer Dashboard (Professional Sidebar Layout)
+import BuyerLayout from './components/buyer/BuyerLayout';
+import BuyerDashboardPage from './pages/buyer/BuyerDashboardPage';
+import BuyerOrdersPage from './pages/buyer/BuyerOrdersPage';
+import BuyerProfilePage from './pages/buyer/BuyerProfilePage';
+import BuyerAddressesPage from './pages/buyer/BuyerAddressesPage';
+import BuyerWishlistPage from './pages/buyer/BuyerWishlistPage';
+import BuyerSettingsPage from './pages/buyer/BuyerSettingsPage';
 
 // Seller Dashboard (Professional Sidebar Layout)
 import SellerLayout from './components/seller/SellerLayout';
@@ -24,6 +32,8 @@ import SellerDashboardPage from './pages/seller/SellerDashboardPage';
 import SellerProductsPage from './pages/seller/SellerProductsPage';
 import SellerAddProductPage from './pages/seller/SellerAddProductPage';
 import SellerOrdersPage from './pages/seller/SellerOrdersPage';
+import SellerPromosPage from './pages/seller/SellerPromosPage';
+import SellerReturnsPage from './pages/seller/SellerReturnsPage';
 import SellerSettingsPage from './pages/seller/SellerSettingsPage';
 
 // Admin (SuperAdmin) imports
@@ -37,6 +47,9 @@ import UsersPage from './admin/pages/UsersPage';
 import OrdersPage from './admin/pages/OrdersPage';
 import BannersPage from './admin/pages/BannersPage';
 import BrandsPage from './admin/pages/BrandsPage';
+import AdminPromosPage from './admin/pages/PromosPage';
+import AdminReturnsPage from './admin/pages/ReturnsPage';
+import EmailManagerPage from './admin/pages/EmailManagerPage';
 
 import StoreCategoriesPage from './pages/CategoriesPage';
 import { ThemeProvider } from './context/ThemeContext';
@@ -64,8 +77,17 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
               <Route path="*" element={<NotFoundPage />} />
+            </Route>
+
+            {/* Buyer Dashboard with professional sidebar layout */}
+            <Route path="/buyer" element={<BuyerLayout />}>
+              <Route path="dashboard" element={<BuyerDashboardPage />} />
+              <Route path="orders" element={<BuyerOrdersPage />} />
+              <Route path="profile" element={<BuyerProfilePage />} />
+              <Route path="addresses" element={<BuyerAddressesPage />} />
+              <Route path="wishlist" element={<BuyerWishlistPage />} />
+              <Route path="settings" element={<BuyerSettingsPage />} />
             </Route>
 
             {/* Seller Dashboard with professional sidebar layout */}
@@ -74,6 +96,8 @@ function App() {
               <Route path="products" element={<SellerProductsPage />} />
               <Route path="add-product" element={<SellerAddProductPage />} />
               <Route path="orders" element={<SellerOrdersPage />} />
+              <Route path="returns" element={<SellerReturnsPage />} />
+              <Route path="promos" element={<SellerPromosPage />} />
               <Route path="settings" element={<SellerSettingsPage />} />
             </Route>
 
@@ -90,6 +114,9 @@ function App() {
                     <Route path="/categories" element={<CategoriesPage />} />
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/orders" element={<OrdersPage />} />
+                    <Route path="/returns" element={<AdminReturnsPage />} />
+                    <Route path="/emails" element={<EmailManagerPage />} />
+                    <Route path="/promos" element={<AdminPromosPage />} />
                   </Route>
                 </Routes>
               </AdminAuthProvider>

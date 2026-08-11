@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   FiGrid, FiShoppingBag, FiFolder, FiUsers, FiPackage,
-  FiLogOut, FiGlobe, FiImage, FiAward
+  FiLogOut, FiGlobe, FiImage, FiAward, FiPercent, FiRotateCcw, FiMail
 } from 'react-icons/fi';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
@@ -19,6 +19,9 @@ const AdminSidebar = ({ isOpen, onToggle, isMobile }) => {
     { path: `${ADMIN_BASE}/categories`, label: 'Categories', icon: <FiFolder size={20} /> },
     { path: `${ADMIN_BASE}/users`, label: 'Users', icon: <FiUsers size={20} /> },
     { path: `${ADMIN_BASE}/orders`, label: 'Orders', icon: <FiPackage size={20} /> },
+    { path: `${ADMIN_BASE}/returns`, label: 'Returns & Refunds', icon: <FiRotateCcw size={20} /> },
+    { path: `${ADMIN_BASE}/emails`, label: 'Mail Manager', icon: <FiMail size={20} /> },
+    { path: `${ADMIN_BASE}/promos`, label: 'Promo Codes', icon: <FiPercent size={20} /> },
   ];
 
   const handleLogout = () => {
