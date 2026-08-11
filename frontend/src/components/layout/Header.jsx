@@ -215,12 +215,12 @@ const Header = () => {
           </button>
 
           {/* Brand Logo (Matching Reference: Left Icon Badge + Right Bold Text) */}
-          <Link to="/" className="flex-shrink-0 flex items-center gap-2.5 group py-0.5">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-gray-800 p-1 border border-gray-200 dark:border-gray-700 shadow-md group-hover:scale-105 transition-transform flex items-center justify-center flex-shrink-0">
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2 group py-0.5">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-gray-800 p-1 border border-gray-200 dark:border-gray-700 shadow-md group-hover:scale-105 transition-transform flex items-center justify-center flex-shrink-0">
               <img src="/InduKart.png" alt="InduKart Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="hidden sm:block">
-              <h1 className="text-gray-900 dark:text-white font-black text-xl sm:text-2xl leading-none tracking-tight">
+            <div className="block">
+              <h1 className="text-gray-900 dark:text-white font-black text-lg sm:text-2xl leading-none tracking-tight">
                 Indu<span className="text-primary-500">Kart</span>
               </h1>
             </div>
@@ -451,15 +451,15 @@ const Header = () => {
         </form>
       </div>
 
-      {/* 2. STORE THEME SECONDARY SUB-HEADER BAR (STRICT SINGLE LINE LAYOUT) */}
-      <div className="bg-primary-600 dark:bg-gray-950 text-white py-2 px-3 lg:px-6 shadow-inner relative z-10 overflow-visible">
-        <div className="flex items-center justify-between gap-3 max-w-[1500px] mx-auto text-xs font-semibold">
+      {/* 2. STORE THEME SECONDARY SUB-HEADER BAR (MOBILE HORIZONTAL SCROLL / DESKTOP CLEAN FLEX) */}
+      <div className="bg-primary-600 dark:bg-gray-950 text-white py-1.5 px-3 lg:px-6 shadow-inner relative z-10">
+        <div className="flex items-center justify-between gap-2 max-w-[1500px] mx-auto text-xs font-semibold overflow-x-auto scrollbar-hide py-0.5">
           
-          {/* Single-Row Flex Container */}
-          <div className="flex items-center gap-1 sm:gap-2 font-bold text-xs flex-wrap">
+          {/* Scrollable / Flex Category Pill Container */}
+          <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs flex-nowrap shrink-0">
             <button
               onClick={() => setShowDrawer(true)}
-              className="flex items-center gap-1.5 py-1.5 px-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors font-extrabold text-white cursor-pointer flex-shrink-0"
+              className="flex items-center gap-1.5 py-1.5 px-3 bg-white/20 hover:bg-white/30 rounded-xl transition-colors font-extrabold text-white cursor-pointer flex-shrink-0 whitespace-nowrap shadow-sm"
             >
               <FiGrid size={14} />
               <span>All Categories</span>
@@ -487,17 +487,17 @@ const Header = () => {
               }
 
               return (
-                <div key={cat.id || cat.slug} className="relative group py-1 flex-shrink-0">
+                <div key={cat.id || cat.slug} className="relative group py-0.5 flex-shrink-0">
                   <Link
                     to={`/search?category=${cat.slug}`}
-                    className="hover:bg-white/10 py-1.5 px-2 rounded-lg transition-all text-white/90 hover:text-white font-bold flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                    className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-all text-white/95 hover:text-white font-bold flex items-center gap-1 cursor-pointer whitespace-nowrap"
                   >
                     <span>{cat.name}</span>
-                    <FiChevronDown size={12} className="opacity-70 group-hover:rotate-180 transition-transform" />
+                    <FiChevronDown size={12} className="opacity-75 hidden md:inline-block group-hover:rotate-180 transition-transform" />
                   </Link>
 
-                  {/* 🌟 FLIPKART STYLE MULTI-COLUMN MEGA DROPDOWN (SMART VIEWPORT POSITIONING) */}
-                  <div className={`absolute ${idx >= 3 ? 'right-0' : 'left-0'} top-full pt-1.5 hidden group-hover:block z-50 animate-fade-in`}>
+                  {/* 🌟 FLIPKART STYLE MULTI-COLUMN MEGA DROPDOWN (DESKTOP ONLY) */}
+                  <div className={`absolute ${idx >= 3 ? 'right-0' : 'left-0'} top-full pt-1.5 hidden md:group-hover:block z-50 animate-fade-in`}>
                     <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-5 min-w-[480px] md:min-w-[600px] text-gray-800 dark:text-gray-200">
                       {/* Header Banner */}
                       <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3 mb-4">
@@ -526,9 +526,9 @@ const Header = () => {
 
                             {sub.description && (
                               <div className="space-y-1 pl-1 border-l-2 border-primary-100 dark:border-gray-800">
-                                {sub.description.split(',').slice(0, 4).map((item, idx) => (
+                                {sub.description.split(',').slice(0, 4).map((item, subIdx) => (
                                   <Link
-                                    key={idx}
+                                    key={subIdx}
                                     to={`/search?category=${sub.slug}&q=${encodeURIComponent(item.trim())}`}
                                     className="block text-[11px] text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors truncate pl-2 hover:translate-x-0.5 transform transition-transform"
                                   >
@@ -546,7 +546,7 @@ const Header = () => {
               );
             })}
 
-            <Link to="/search?featured=true" className="hover:bg-white/10 py-1.5 px-2 rounded-lg transition-colors text-white/90 hover:text-white font-bold whitespace-nowrap flex-shrink-0">
+            <Link to="/search?featured=true" className="hover:bg-white/15 py-1.5 px-2.5 rounded-xl transition-colors text-white/95 hover:text-white font-bold whitespace-nowrap flex-shrink-0">
               Today's Deals
             </Link>
           </div>
@@ -554,7 +554,7 @@ const Header = () => {
           {/* Right Side Prominent Amber "Sell On InduKart" CTA Button */}
           <Link
             to={isSeller ? '/seller/dashboard' : '/register?role=seller'}
-            className="py-1.5 px-3.5 bg-amber-400 hover:bg-amber-300 text-gray-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all flex-shrink-0 border border-amber-300 hover:scale-105 active:scale-95"
+            className="py-1.5 px-3.5 bg-amber-400 hover:bg-amber-300 text-gray-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all flex-shrink-0 border border-amber-300 hover:scale-105 active:scale-95 whitespace-nowrap ml-2"
           >
             <span>🏪</span>
             <span>Sell On InduKart</span>

@@ -165,19 +165,19 @@ const HomePage = () => {
       <section ref={productsSectionRef} className="section">
         <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-card overflow-hidden border border-gray-100 dark:border-gray-800">
           {/* Header Title Bar */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 border-b dark:border-gray-800 gap-4 bg-surface-50/50 dark:bg-gray-800/30">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 sm:p-6 border-b dark:border-gray-800 gap-3 sm:gap-4 bg-surface-50/50 dark:bg-gray-800/30">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-gray-900 dark:text-white">
+                <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">
                   {selectedCategorySlug === 'all' ? 'All Products' : selectedCategoryObj?.name || 'Category Products'}
                 </h2>
                 {selectedCategorySlug !== 'all' && (
-                  <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-primary-100 text-primary-700 border border-primary-200">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-primary-100 text-primary-700 border border-primary-200">
                     Category Active
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 mt-0.5 sm:mt-1">
                 Showing <strong className="text-gray-700 dark:text-gray-200">{processedProducts.length}</strong> available items
               </p>
             </div>
@@ -185,7 +185,7 @@ const HomePage = () => {
             {(selectedCategorySlug !== 'all' || selectedBrand !== 'all' || priceRange !== 'all' || minRating !== 'all' || inStockOnly) && (
               <button
                 onClick={resetAllFilters}
-                className="btn-ghost text-xs text-red-500 hover:text-red-700 hover:bg-red-50 flex items-center gap-1 font-bold"
+                className="btn-ghost text-xs text-red-500 hover:text-red-700 hover:bg-red-50 flex items-center gap-1 font-bold py-1 px-2.5"
               >
                 <FiX size={14} /> Clear All Filters
               </button>
@@ -193,9 +193,9 @@ const HomePage = () => {
           </div>
 
           {/* E-Commerce Filter Toolbar */}
-          <div className="p-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1 text-[11px]">
+          <div className="p-3 sm:p-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-2 text-xs overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-2 flex-nowrap sm:flex-wrap shrink-0">
+              <span className="font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1 text-[11px] shrink-0">
                 <FiFilter size={14} className="text-primary-500" /> Filter By:
               </span>
 
@@ -244,7 +244,7 @@ const HomePage = () => {
               {/* 4 Star Rating Toggle */}
               <button
                 onClick={() => setMinRating(minRating === '4' ? 'all' : '4')}
-                className={`px-3 py-1.5 rounded-xl font-bold border transition-colors ${
+                className={`px-3 py-1.5 rounded-xl font-bold border transition-colors shrink-0 ${
                   minRating === '4'
                     ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
                     : 'bg-surface-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700 hover:border-amber-400'
@@ -256,7 +256,7 @@ const HomePage = () => {
               {/* In-Stock Only Toggle */}
               <button
                 onClick={() => setInStockOnly(!inStockOnly)}
-                className={`px-3 py-1.5 rounded-xl font-bold border transition-colors ${
+                className={`px-3 py-1.5 rounded-xl font-bold border transition-colors shrink-0 ${
                   inStockOnly
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
                     : 'bg-surface-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700 hover:border-emerald-400'
@@ -268,9 +268,9 @@ const HomePage = () => {
           </div>
 
           {/* Product Grid */}
-          <div className="p-6">
+          <div className="p-3 sm:p-6">
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 sm:gap-4">
                 {Array.from({ length: 12 }).map((_, idx) => (
                   <div key={idx} className="animate-pulse bg-gray-100 dark:bg-gray-800/80 rounded-2xl h-72 border border-gray-200/60 dark:border-gray-700/60 p-4 flex flex-col justify-between">
                     <div className="bg-gray-200 dark:bg-gray-700/80 rounded-xl h-36 w-full mb-3"></div>
@@ -283,7 +283,7 @@ const HomePage = () => {
                 ))}
               </div>
             ) : processedProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2.5 sm:gap-4">
                 {processedProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

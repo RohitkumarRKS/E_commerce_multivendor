@@ -71,7 +71,7 @@ const HeroBanner = ({ banners = [] }) => {
               isCurrent ? 'block opacity-100' : 'hidden opacity-0'
             }`}
           >
-            <div className={`relative bg-gradient-to-r ${bgGradient} text-white py-12 lg:py-20 overflow-hidden`}>
+            <div className={`relative bg-gradient-to-r ${bgGradient} text-white py-8 sm:py-12 lg:py-20 overflow-hidden`}>
               {/* Background Orbs */}
               <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <div className="absolute top-10 left-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
@@ -79,28 +79,28 @@ const HeroBanner = ({ banners = [] }) => {
               </div>
 
               <div className="container-main relative z-10">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
                   {/* Left Slide Content */}
                   <div className="text-center lg:text-left max-w-xl animate-fade-in">
-                    <span className="inline-block bg-white/20 text-white text-xs font-bold px-4 py-1.5 rounded-full mb-3 backdrop-blur-sm shadow-sm">
+                    <span className="inline-block bg-white/20 text-white text-[11px] sm:text-xs font-bold px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full mb-2.5 sm:mb-3 backdrop-blur-sm shadow-sm">
                       {slide.badge || slide.discount || '🎉 Special Offer'}
                     </span>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                    <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white mb-2.5 sm:mb-4 leading-tight">
                       {slide.title}
                     </h2>
-                    <p className="text-white/85 text-sm md:text-base mb-6 leading-relaxed">
+                    <p className="text-white/90 text-xs sm:text-sm md:text-base mb-4 sm:mb-6 leading-relaxed max-w-md mx-auto lg:mx-0">
                       {slide.subtitle || 'Shop from top verified sellers with instant discounts.'}
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                    <div className="flex flex-row gap-2.5 justify-center lg:justify-start">
                       <Link
                         to={slide.linkUrl || '/search'}
-                        className="btn bg-white text-primary-600 hover:bg-gray-50 font-bold px-8 py-3 text-sm shadow-lg hover:shadow-xl transition-all"
+                        className="btn bg-white text-primary-600 hover:bg-gray-50 font-bold px-5 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all"
                       >
-                        Explore Deals <FiArrowRight size={18} />
+                        Explore Deals <FiArrowRight size={16} />
                       </Link>
                       <Link
                         to="/categories"
-                        className="btn border-2 border-white/50 text-white hover:bg-white/10 font-medium px-8 py-3 text-sm backdrop-blur-sm"
+                        className="btn border-2 border-white/50 text-white hover:bg-white/10 font-medium px-4 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm backdrop-blur-sm"
                       >
                         All Categories
                       </Link>
@@ -146,17 +146,17 @@ const HeroBanner = ({ banners = [] }) => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/25 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all z-20 shadow-md"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/25 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all z-20 shadow-md"
             title="Previous Banner"
           >
-            <FiChevronLeft size={22} />
+            <FiChevronLeft size={20} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/25 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all z-20 shadow-md"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/25 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-all z-20 shadow-md"
             title="Next Banner"
           >
-            <FiChevronRight size={22} />
+            <FiChevronRight size={20} />
           </button>
         </>
       )}
