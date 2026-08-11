@@ -33,6 +33,8 @@ const Header = () => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const categoryDropdownRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const catStripRef = useRef(null);
+  const [catStripScroll, setCatStripScroll] = useState({ canLeft: false, canRight: true });
 
   // SuperAdmin Managed Promo Badge State
   const [promoBadge, setPromoBadge] = useState({
@@ -455,8 +457,54 @@ const Header = () => {
 
       {/* 2. FLIPKART/INDUKART STANDARD ICON CATEGORY STRIP (BOTH MOBILE & DESKTOP) */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200/70 dark:border-gray-800 shadow-sm relative z-40">
-        <div className="max-w-[1500px] mx-auto px-3 sm:px-6">
-          <div className="flex items-center gap-5 sm:gap-6 overflow-x-auto overflow-y-visible scrollbar-hide py-2.5">
+        <div className="max-w-[1500px] mx-auto px-3 sm:px-6 relative">
+
+          {/* LEFT SCROLL ARROW */}
+          {catStripScroll.canLeft && (
+            <button
+              onClick={() => {
+                if (catStripRef.current) catStripRef.current.scrollBy({ left: -240, behavior: 'smooth' });
+              }}
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all text-gray-600 dark:text-gray-300 hover:text-primary-600"
+              aria-label="Scroll categories left"
+            >
+              <FiChevronDown size={18} className="rotate-90" />
+            </button>
+          )}
+
+          {/* RIGHT SCROLL ARROW */}
+          {catStripScroll.canRight && (
+            <button
+              onClick={() => {
+                if (catStripRef.current) catStripRef.current.scrollBy({ left: 240, behavior: 'smooth' });
+              }}
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all text-gray-600 dark:text-gray-300 hover:text-primary-600"
+              aria-label="Scroll categories right"
+            >
+              <FiChevronDown size={18} className="-rotate-90" />
+            </button>
+          )}
+
+          {/* Fade edges */}
+          {catStripScroll.canLeft && (
+            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-white dark:from-gray-900 to-transparent z-[5] pointer-events-none" />
+          )}
+          {catStripScroll.canRight && (
+            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white dark:from-gray-900 to-transparent z-[5] pointer-events-none" />
+          )}
+
+          <div
+            ref={catStripRef}
+            className="flex items-center gap-5 sm:gap-6 overflow-x-auto scrollbar-hide py-2.5 px-1"
+            onScroll={() => {
+              if (!catStripRef.current) return;
+              const el = catStripRef.current;
+              setCatStripScroll({
+                canLeft: el.scrollLeft > 8,
+                canRight: el.scrollLeft < el.scrollWidth - el.clientWidth - 8,
+              });
+            }}
+          >
             
             {/* 1. ALL CATEGORIES / FOR YOU BUTTON */}
             <button
